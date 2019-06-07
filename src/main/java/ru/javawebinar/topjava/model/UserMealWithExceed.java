@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class UserMealWithExceed {
+
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -17,6 +18,13 @@ public class UserMealWithExceed {
         this.description = description;
         this.calories = calories;
         this.exceed = exceed;
+    }
+
+    public UserMealWithExceed(UserMeal meal, int caloriesPerDay) {
+        this.dateTime = meal.getDateTime();
+        this.description = meal.getDescription();
+        this.calories = meal.getCalories();
+        this.exceed = UserMeal.getCaloriesSumByDay().getOrDefault(dateTime.toLocalDate(), 0) > caloriesPerDay;
     }
 
     @Override
