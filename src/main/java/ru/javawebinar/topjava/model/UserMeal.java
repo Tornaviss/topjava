@@ -19,8 +19,11 @@ public class UserMeal {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
-        if (!caloriesSumByDay.containsKey(dateTime.toLocalDate())) caloriesSumByDay.put(dateTime.toLocalDate(), calories);
-        caloriesSumByDay.put(dateTime.toLocalDate(), caloriesSumByDay.get(dateTime.toLocalDate()) + calories);
+        if (!caloriesSumByDay.containsKey(dateTime.toLocalDate())) {
+            caloriesSumByDay.put(dateTime.toLocalDate(), calories);
+        } else {
+            caloriesSumByDay.put(dateTime.toLocalDate(), caloriesSumByDay.get(dateTime.toLocalDate()) + calories);
+        }
     }
 
     public static SortedMap<LocalDate, Integer> getCaloriesSumByDay() {
