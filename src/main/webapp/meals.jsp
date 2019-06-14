@@ -18,7 +18,7 @@
     <th>Date</th>
     <th>Calories</th>
     <c:forEach var="meal" items='<%= request.getAttribute("meals")%>'>
-    <tr style="background-color:<c:if test="${meal.excess}">lightcoral</c:if><c:if test="${!meal.excess}">lightgreen</c:if>">
+    <tr style="background-color:${meal.excess ? 'lightcoral' : 'lightgreen'}">
         <td>${meal.dateTime.toLocalDate()}</td>
         <td>${meal.description}</td>
         <td>${meal.calories}</td>
