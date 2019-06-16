@@ -19,11 +19,14 @@
     <th>Calories</th>
     <c:forEach var="meal" items='<%= request.getAttribute("meals")%>'>
     <tr style="background-color:${meal.excess ? 'lightcoral' : 'lightgreen'}">
-        <td>${meal.dateTime.toLocalDate()}</td>
+        <td>${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}</td>
         <td>${meal.description}</td>
         <td>${meal.calories}</td>
+        <td><a href="meals?action=edit&&id=${meal.id}">edit</a></td>
+        <td><a href="meals?action=delete&&id=${meal.id}">delete</a></td>
     </tr>
     </c:forEach>
 </table>
+<a href="meals?action=add">Add new meal</a>
 </body>
 </html>
