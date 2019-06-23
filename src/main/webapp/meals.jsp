@@ -14,13 +14,74 @@
         .excess {
             color: red;
         }
+        .Row
+        {
+            display: table;
+            min-width: 500px;
+            width: 100%;
+            table-layout: fixed;
+            border-spacing: 10px;
+            background-color:#FAFAFA;
+        }
+        .Column
+        {
+            display: table-cell;
+        }
+        .Column_bottom
+        {
+            padding-top:2%;
+        }
     </style>
+    <script>
+        function clearFilter() {
+            document.location.assign("meals?action=clearFilters");
+        }
+    </script>
 </head>
 <body>
-<section>
+<header>
     <h3><a href="index.html">Home</a></h3>
-    <hr/>
+</header>
+<hr/>
+<nav style="min-width:500px;max-width:80%;">
     <h2>Meals</h2>
+    <div style="position:center;">
+        <form name="filter" id="filter" action="meals?action=filter" method="post">
+            <section class="Row">
+                <section class="Column">
+                    <div>
+                        <label for="dateFrom">От даты</label>
+                        <br />
+                        <input type="date" name="dateFrom" id="dateFrom" value="${dateFrom}" />
+                    </div>
+                    <div class="Column_bottom">
+                        <label for="dateTo">До даты</label>
+                        <br />
+                        <input type="date" name="dateTo" id="dateTo" value="${dateTo}"/>
+                    </div>
+                </section>
+                <section class="Column">
+                    <div>
+                        <label for="timeFrom">От времени</label>
+                        <br />
+                        <input type="time" name="timeFrom" id="timeFrom" value="${timeFrom}" />
+                    </div>
+                    <div class="Column_bottom">
+                        <label for="timeTo">До времени</label>
+                        <br />
+                        <input type="time" name="timeTo" id="timeTo" value="${timeTo}">
+                    </div>
+                </section>
+            </section>
+        </form>
+    </div>
+    <div align="right">
+        <button type="submit" onclick="clearFilter()">Отменить</button>
+        <button type="submit" form="filter">Фильтровать</button>
+    </div>
+
+</nav>
+<section>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
@@ -34,7 +95,7 @@
         </tr>
         </thead>
         <c:forEach items="${meals}" var="meal">
-            <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
+            <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
             <tr class="${meal.excess ? 'excess' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>

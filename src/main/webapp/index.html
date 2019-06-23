@@ -10,5 +10,15 @@
     <li><a href="users">Users</a></li>
     <li><a href="meals">Meals</a></li>
 </ul>
+<label for="loginForm">Sign in</label>
+<form action="meals?action=authUser" method="post" id="loginForm">
+    <select name="authUserId" id="userSelect" required="required">
+        <option value="1">Valera</option>
+        <option value="2">Kostyan</option>
+        <option value="3">Miha</option>
+        <input type="submit" class="button" value="Submit" />
+    </select>
+
+</form>
 </body>
 </html>
