@@ -38,13 +38,13 @@ public class JdbcMealRepositoryImpl implements MealRepository {
                 .addValue("id", meal.getId())
                 .addValue("dateTime", meal.getDateTime())
                 .addValue("description", meal.getDescription())
-                .addValue("calories", meal.getCalories());
+                .addValue("calories", meal.getCalories())
+                .addValue("user_id", userId);
         if (meal.isNew()) {
-            map.addValue("user_id", userId);
             Number id = insertMeal.executeAndReturnKey(map);
             meal.setId(id.intValue());
-        } else if(namedParameterJdbcTemplate.update("UPDATE meals SET date_time=:dateTime, description=:description, " +
-                "calories=:calories WHERE id=:id AND user_id=" + userId, map) == 0) {
+        } else if (namedParameterJdbcTemplate.update("UPDATE meals SET date_time=:dateTime, description=:description, " +
+                "calories=:calories WHERE id=:id AND user_id=:user_id", map) == 0) {
             return null;
         }
         return meal;
