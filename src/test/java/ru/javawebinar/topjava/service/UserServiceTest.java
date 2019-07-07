@@ -1,6 +1,9 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -10,6 +13,7 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.rules.TestTimeWatcher;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Collections;
@@ -28,6 +32,14 @@ public class UserServiceTest {
 
     @Autowired
     private UserService service;
+
+    @Rule
+    public final TestRule watcher = new TestTimeWatcher();
+
+    @AfterClass
+    public static void after() {
+        TestTimeWatcher.logTotalAndRefresh(UserServiceTest.class);
+    }
 
     @Test
     public void create() throws Exception {

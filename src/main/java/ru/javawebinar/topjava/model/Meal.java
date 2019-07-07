@@ -20,6 +20,8 @@ import java.time.LocalTime;
                 "where m.user.id = :userId order by m.dateTime desc"),
         @NamedQuery(name = Meal.ALL_BETWEEN, query = "select m from Meal m left join fetch m.user left join fetch m.user.roles " +
                 "where m.user.id = :userId and m.dateTime between :start and :end order by m.dateTime desc")
+
+        //TODO multithreaded execution optimisation (provide locking in queries)
 })
 
 @Entity
