@@ -3,8 +3,10 @@ package ru.javawebinar.topjava.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -53,5 +55,14 @@ public class UserService {
     public void update(User user) throws NotFoundException {
         Assert.notNull(user, "user must not be null");
         checkNotFoundWithId(repository.save(user), user.getId());
+    }
+    public User getWithMealsFetched(int id) {
+        return checkNotFoundWithId(repository.getWithMealsFetched(id), id);
+    }
+
+    public Pair<User, Meal> getUserWithMeal(int id, int mealId) {
+        User user = repository.getWithMealsFetched(id);
+        Meal meal = user.getMeals().stream().filter(x -> x.getId() == mealId).findFirst().orElse(null);
+        return Pair.of(checkNotFoundWithId(user, id), checkNotFoundWithId(meal, mealId));
     }
 }
