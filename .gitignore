@@ -9,6 +9,4 @@ description.md
 graduation.md
 ReleaseNotes.md
 doc
-
-
-
+*.patch
