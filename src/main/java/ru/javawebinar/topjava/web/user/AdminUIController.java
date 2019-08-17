@@ -37,4 +37,14 @@ public class AdminUIController extends AbstractUserController {
             super.create(user);
         }
     }
+
+    //Makes 1 db query with hibernate cache and 2 without one
+
+    @PatchMapping("/{id}&{enabled}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void setEnabled(@PathVariable int id, @PathVariable Boolean enabled) {
+        super.setEnabled(enabled, id);
+    }
+
+
 }

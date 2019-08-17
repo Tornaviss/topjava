@@ -38,4 +38,9 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
                 .findFirst()
                 .orElse(null);
     }
+
+    public boolean setEnabled(Boolean enabled, int id) {
+        entryMap.get(id).setEnabled(enabled);
+        return true;
+    }
 }
