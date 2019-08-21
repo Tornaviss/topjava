@@ -1,14 +1,25 @@
 package ru.javawebinar.topjava.to;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class MealTo extends BaseTo {
+public class MealTo extends BaseTo implements Serializable {
+    private static final long serialVersionUID = 1L;
 
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateTime;
 
+    @NotBlank
+    @Size(min = 2, max = 120, message = "length must be from 2 to 100 characters")
     private String description;
 
+    @Min(value = 20, message = "Calories should not be less than 20")
+    @Max(value = 5000, message = "calories should not be greater than 5000")
     private int calories;
 
     private boolean excess;
@@ -38,6 +49,22 @@ public class MealTo extends BaseTo {
 
     public boolean isExcess() {
         return excess;
+    }
+
+    public void setExcess(boolean excess) {
+        this.excess = excess;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
     }
 
     @Override

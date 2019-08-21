@@ -36,11 +36,15 @@ public class MealsUtil {
 
         return meals.stream()
                 .filter(filter)
-                .map(meal -> createWithExcess(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
+                .map(meal -> asTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(toList());
     }
 
-    public static MealTo createWithExcess(Meal meal, boolean excess) {
+    public static MealTo asTo(Meal meal, boolean excess) {
         return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+    }
+
+    public static Meal asMeal(MealTo mealTo) {
+        return new Meal(mealTo.getId(), mealTo.getDateTime(), mealTo.getDescription(), mealTo.getCalories());
     }
 }
