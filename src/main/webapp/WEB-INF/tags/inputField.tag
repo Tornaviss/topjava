@@ -7,13 +7,14 @@
 <%@ attribute name="inputType" required="false" description="Input type" %>
 
 <spring:bind path="${name}">
+    <c:set var="classText" value="form-control ${status.error ? 'is-invalid' : ''}"/>
     <div class="form-group ${status.error ? 'error' : '' }">
         <label class="col-form-label"><spring:message code="${labelCode}"/></label>
         <c:choose>
-            <c:when test="${inputType == 'password'}"><form:password path="${name}" class="form-control is-invalid"/></c:when>
-            <c:when test="${inputType == 'number'}"><form:input path="${name}" type="number" class="form-control is-invalid"/></c:when>
-            <c:otherwise><form:input path="${name}" class="form-control is-invalid"/></c:otherwise>
+            <c:when test="${inputType == 'password'}"><form:password path="${name}" class="${classText}"/></c:when>
+            <c:when test="${inputType == 'number'}"><form:input path="${name}" type="number" class="${classText}"/></c:when>
+            <c:otherwise><form:input path="${name}" class="${classText}"/></c:otherwise>
         </c:choose>
-        <div class="invalid-feedback">${status.errorMessage}</div>
+        <div class="invalid-feedback">${status.getErrorMessagesAsString("</br>")}</div>
     </div>
 </spring:bind>

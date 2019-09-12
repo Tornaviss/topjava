@@ -1,9 +1,12 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
@@ -59,6 +62,19 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
         assertMatch(returned, created);
         assertMatch(userService.getByEmail("newemail@ya.ru"), created);
+    }
+
+    @Test
+    void registerWithEmailDuplicate() throws Exception {
+        UserTo duplicate = new UserTo(null, "duplicate", USER.getEmail(), "111111", 2005);
+        ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(duplicate)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+        String response = action.andReturn().getResponse().getContentAsString();
+        Assertions.assertTrue(response.contains("User with this email already exists"));
+
     }
 
     @Test

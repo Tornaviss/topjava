@@ -1,9 +1,14 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
@@ -101,7 +106,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         ResultActions action = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(jsonWithPassword(expected, "newPass")))
+                .content(jsonWithPassword(expected, expected.getPassword())))
                 .andExpect(status().isCreated());
 
         User returned = readFromJson(action, User.class);
@@ -109,6 +114,30 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
         assertMatch(returned, expected);
         assertMatch(userService.getAll(), ADMIN, expected, USER);
+    }
+
+    @Test
+    void createWithLocationUnprocessable() throws Exception {
+        User expected = new User(null, "New", "new@gmail.com", " ",  2300, Role.ROLE_USER, Role.ROLE_ADMIN);
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(jsonWithPassword(expected, " ")))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void createWithLocationEmailDuplicate() throws Exception {
+        User duplicate = new User(null, "Duplicate", USER.getEmail(), "222222", 3000, Role.ROLE_USER);
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic((ADMIN)))
+                .content(jsonWithPassword(duplicate, duplicate.getPassword())))
+                .andExpect(status().isConflict())
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+        Assertions.assertTrue(response.contains("User with this email already exists"));
     }
 
     @Test
